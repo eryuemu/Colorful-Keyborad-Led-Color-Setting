@@ -1,43 +1,51 @@
-# Colorful Keyborad Led Color Setting
-Colorful Keyborad Led Color Setting  
-My laptop is [COLORFUL 将星x15 at 2022](https://www.colorful.cn/product_show.aspx?mid=158&id=13).  
-<s>也许神舟笔记本也可以使用这个调节键盘灯</s>  
-[English introduction](#english)  
-[中文介绍](#中文)  
-# English  
-This is a software to change Colorful laptop's keyboard Led colorful.  
-+ ## Why I build it?  
-+ I'm a freshman in collage in 2022/9/1.To study in collage I bought this ["COLORFUL"](https://www.colorful.cn/) laptop.All things are right,but this laptop have not RGB loop function.That was why my built it.  
-+ ## How to build it?  
-+ First of all,I used dnspy to check LedKeyboardSetting.exe source code and debug it.  
-+ <s> By the way,what a unuseless code in LedKeyboardSetting. </s>  
-+ Secondly through my reverse I finded InsydeDCHU.dll that is the key to setting LED color.  
-+ And then I use ida to find this  
-+ `__int64 __fastcall SetDCHU_Data(int a1, __int64 a2, int a3)`  
-+ I confirm this can set color to LED.At the last I use C# to make my Colorful Keyborad Led Color Setting.  
-+ <s> Everythings are easy. </s>  
-+  ## How to use it?  
-+  1.Confirm "InsydeDCHU.dll" and my software in same path  
-+  2.Accept disclaimers  
-+  3.Software UI are Chinese google translate can help you :D  
-+  ![](https://github.com/moshuiD/Colorful-Keyborad-Led-Color-Setting/blob/main/ui.png)  
-+  ## Disclaimers  
-+  1.Powered by moshui.
-+  2.If have any hardware damage.I have not any duty to pay for it.  
+# 七彩虹笔记本键盘灯光控制中心 (Colorful Keyboard LED Color Setting)
 
-# 中文  
-此程序可以修改七彩虹笔记本键盘灯颜色  
-+ ## 为什么制作它？
-+ 我在2022年9月1日会成为大一新生。为了学习买了这个[七彩虹](https://www.colorful.cn/)笔记本.这个笔记本一切都很让我满意，就是这个键盘灯他没有RGB循环和自定义颜色功能。为了弥补这个，我写了此程序  
-+ ## 怎么制作的？  
-+ 首先使用dnspy查看源代码和调试  
-+ <s> 顺便说一下，他这个无用的代码真的多 </s>  
-+ 然后通过我的逆向我发现了InsydeDCHU.dll这个dll  
-+ 接着使用ida发现这个函数  
-+ ` __int64 __fastcall SetDCHU_Data(int a1, __int64 a2, int a3)`  
-+ 我确定这个能设置键盘灯颜色，然后使用C#编写程序  
-+ ## 怎么使用？
-+ 1.确保InsydeDCHU.dll与本程序位于同一个文件夹
-+ 2.接受免责声明
-+ ## 程序截图  
-+ ![](https://github.com/moshuiD/Colorful-Keyborad-Led-Color-Setting/blob/main/ui.png)
+本软件是专为 **七彩虹将星系列笔记本** 打造的免安装、纯净绿色的键盘灯光调节工具。基于底层 `InsydeDCHU.dll` 驱动开发，采用原生 64 位 (x64) 编译，彻底解决了原版 AnyCPU 编译在 x64 系统上加载 64 位驱动闪退的问题。
+
+本项目为个人 Fork 修改版，已经进行了彻底的**科幻 HUD 亚克力视觉重构**与性能优化。
+
+---
+
+## 🌟 终极亚克力 HUD 版 (v2.5) 核心特性
+
+1. **科幻 HUD 亚克力视觉设计**：
+   - 界面整体采用暗曜镜面渐变背景，边缘环绕高科技 cyan 霓虹发光线条。
+   - 控件面板升级为 8% 透明度的反光玻璃材质（Acrylic Glass），呈现极强的 3D 悬浮反光质感。
+
+2. **15 段发光数字“能量条”**：
+   - 彻底废弃了原版塑料拉条（TrackBar），使用 GDI+ 纯手绘了 15 段高亮电子能量格作为速度与亮度调节滑块。
+   - 支持鼠标点击、无级拖拽，能量格亮起时带有柔和的 Bloom 漫反射发光效果。
+
+3. **3D 镜面 LED 预设球**：
+   - 将原版静态的色彩方块升级为带有镜面高光、折射弧度和下方彩色氛围投影的 3D LED 发光球体。
+
+4. **双层霓虹激光管色彩预览**：
+   - 顶部的灯光颜色指示条重构为“激光霓虹管”，中心为高亮白光核心，外侧为多层 alpha 渐变渲染的彩色发光晕圈，并且核心与光晕会同步展现炫丽色彩变化。
+
+5. **纯中文 & 响应式全屏自适应**：
+   - 移除全部英文界面，完全汉化，直观清晰。
+   - 解锁窗口自由拉伸和最大化，所有科技面板与能量条均绑定自适应锚点，在大屏幕或全屏下自动延展。
+
+6. **宿主机零污染与绿色运行**：
+   - 移除了所有系统启动残留注册表，软件不写系统，配置全部在本地 `config.txt` 中自包含。
+   - 只需把 `.exe` 和 `InsydeDCHU.dll` 放在同一个文件夹（例如桌面 [ColorfulKeyboard](file:///C:/Users/eryuemu/Desktop/ColorfulKeyboard)）双击即可运行。
+
+7. **驱动异步安全调用**：
+   - 将底层物理驱动写入指令全部移出 UI 线程，交给独立的后台 `Task` 异步线程执行，彻底杜绝了因底层 DLL 写入阻塞而导致的前端界面假死与冻结。
+
+---
+
+## 🛠️ 运行与开发环境
+
+- **支持硬件**：七彩虹将星系列笔记本（单区 RGB 键盘）
+- **软件架构**：x64 原生（必须在 64 位系统下运行）
+- **依赖文件**：`InsydeDCHU.dll` (须放置在与 `ColorfulLedKeyboardSet.exe` 同一目录下)
+- **编译工具**：MS Build (C# / .NET Framework 4.7.2)
+
+---
+
+## 🚀 快速使用
+
+1. 下载编译好的 Release 发布包。
+2. 确保文件夹中同时包含 `ColorfulLedKeyboardSet.exe` 和 `InsydeDCHU.dll`。
+3. 双击 `ColorfulLedKeyboardSet.exe` 即可启动您的键盘灯光科幻控制中心！

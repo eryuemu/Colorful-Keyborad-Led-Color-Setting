@@ -12,6 +12,7 @@ namespace ColorfulLedKeyboardSet
         public int Brightness { get; set; }
         public bool StartMinimized { get; set; }
         public bool AutoStart { get; set; }
+        public bool Rainbow { get; set; }
 
         public AppConfig()
         {
@@ -21,6 +22,7 @@ namespace ColorfulLedKeyboardSet
             Brightness = 100;
             StartMinimized = false;
             AutoStart = false;
+            Rainbow = false;
         }
     }
 
@@ -53,6 +55,7 @@ namespace ColorfulLedKeyboardSet
                         case "Brightness": config.Brightness = int.Parse(val); break;
                         case "StartMinimized": config.StartMinimized = bool.Parse(val); break;
                         case "AutoStart": config.AutoStart = bool.Parse(val); break;
+                        case "Rainbow": config.Rainbow = bool.Parse(val); break;
                     }
                 }
             }
@@ -75,6 +78,7 @@ namespace ColorfulLedKeyboardSet
                 sb.AppendLine(string.Format("Brightness={0}", config.Brightness));
                 sb.AppendLine(string.Format("StartMinimized={0}", config.StartMinimized));
                 sb.AppendLine(string.Format("AutoStart={0}", config.AutoStart));
+                sb.AppendLine(string.Format("Rainbow={0}", config.Rainbow));
                 File.WriteAllText(ConfigPath, sb.ToString(), Encoding.UTF8);
             }
             catch

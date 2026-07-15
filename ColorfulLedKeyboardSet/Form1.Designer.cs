@@ -23,6 +23,10 @@ namespace ColorfulLedKeyboardSet
             this.components = new System.ComponentModel.Container();
             this.tblModes = new System.Windows.Forms.TableLayoutPanel();
             this.btnModeStrobe = new System.Windows.Forms.Button();
+            this.btnModeMusic = new System.Windows.Forms.Button();
+            this.btnToggleRainbow = new System.Windows.Forms.Button();
+            this.btnModeTemp = new System.Windows.Forms.Button();
+            this.btnModeAmbient = new System.Windows.Forms.Button();
             this.btnModeBreath = new System.Windows.Forms.Button();
             this.btnModeLoop = new System.Windows.Forms.Button();
             this.btnModeStatic = new System.Windows.Forms.Button();
@@ -64,15 +68,20 @@ namespace ColorfulLedKeyboardSet
             this.tblModes.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
             this.tblModes.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
             this.tblModes.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
-            this.tblModes.Controls.Add(this.btnModeStrobe, 3, 0);
-            this.tblModes.Controls.Add(this.btnModeBreath, 2, 0);
-            this.tblModes.Controls.Add(this.btnModeLoop, 1, 0);
             this.tblModes.Controls.Add(this.btnModeStatic, 0, 0);
+            this.tblModes.Controls.Add(this.btnModeLoop, 1, 0);
+            this.tblModes.Controls.Add(this.btnModeBreath, 2, 0);
+            this.tblModes.Controls.Add(this.btnModeStrobe, 3, 0);
+            this.tblModes.Controls.Add(this.btnModeMusic, 0, 1);
+            this.tblModes.Controls.Add(this.btnModeTemp, 1, 1);
+            this.tblModes.Controls.Add(this.btnModeAmbient, 2, 1);
+            this.tblModes.Controls.Add(this.btnToggleRainbow, 3, 1);
             this.tblModes.Location = new System.Drawing.Point(20, 85);
             this.tblModes.Name = "tblModes";
-            this.tblModes.RowCount = 1;
-            this.tblModes.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tblModes.Size = new System.Drawing.Size(810, 48);
+            this.tblModes.RowCount = 2;
+            this.tblModes.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tblModes.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tblModes.Size = new System.Drawing.Size(810, 96);
             this.tblModes.TabIndex = 0;
             // 
             // btnModeStrobe
@@ -91,6 +100,66 @@ namespace ColorfulLedKeyboardSet
             this.btnModeStrobe.Text = "闪烁警示";
             this.btnModeStrobe.UseVisualStyleBackColor = true;
             this.btnModeStrobe.Click += new System.EventHandler(this.btnMode_Click);
+            // 
+            // btnModeMusic
+            // 
+            this.btnModeMusic.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btnModeMusic.FlatAppearance.BorderSize = 0;
+            this.btnModeMusic.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(45)))));
+            this.btnModeMusic.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(35)))));
+            this.btnModeMusic.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnModeMusic.Font = new System.Drawing.Font("微软雅黑", 10F, System.Drawing.FontStyle.Bold);
+            this.btnModeMusic.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(140)))), ((int)(((byte)(140)))), ((int)(((byte)(145)))));
+            this.btnModeMusic.Name = "btnModeMusic";
+            this.btnModeMusic.TabIndex = 14;
+            this.btnModeMusic.Text = "♪ 音乐律动";
+            this.btnModeMusic.UseVisualStyleBackColor = true;
+            this.btnModeMusic.Click += new System.EventHandler(this.btnMode_Click);
+            // 
+            // btnToggleRainbow
+            // 
+            this.btnToggleRainbow.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btnToggleRainbow.FlatAppearance.BorderSize = 0;
+            this.btnToggleRainbow.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(45)))));
+            this.btnToggleRainbow.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(35)))));
+            this.btnToggleRainbow.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnToggleRainbow.Font = new System.Drawing.Font("微软雅黑", 10F, System.Drawing.FontStyle.Bold);
+            this.btnToggleRainbow.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(140)))), ((int)(((byte)(140)))), ((int)(((byte)(145)))));
+            this.btnToggleRainbow.Name = "btnToggleRainbow";
+            this.btnToggleRainbow.TabIndex = 15;
+            this.btnToggleRainbow.Text = "🌈 七彩变色 (关)";
+            this.btnToggleRainbow.UseVisualStyleBackColor = true;
+            this.btnToggleRainbow.Click += new System.EventHandler(this.btnToggleRainbow_Click);
+            // 
+            // btnModeTemp
+            // 
+            this.btnModeTemp.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btnModeTemp.FlatAppearance.BorderSize = 0;
+            this.btnModeTemp.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(45)))));
+            this.btnModeTemp.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(35)))));
+            this.btnModeTemp.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnModeTemp.Font = new System.Drawing.Font("微软雅黑", 10F, System.Drawing.FontStyle.Bold);
+            this.btnModeTemp.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(140)))), ((int)(((byte)(140)))), ((int)(((byte)(145)))));
+            this.btnModeTemp.Name = "btnModeTemp";
+            this.btnModeTemp.TabIndex = 16;
+            this.btnModeTemp.Text = "温度映射";
+            this.btnModeTemp.UseVisualStyleBackColor = true;
+            this.btnModeTemp.Click += new System.EventHandler(this.btnMode_Click);
+            // 
+            // btnModeAmbient
+            // 
+            this.btnModeAmbient.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btnModeAmbient.FlatAppearance.BorderSize = 0;
+            this.btnModeAmbient.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(45)))));
+            this.btnModeAmbient.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(35)))));
+            this.btnModeAmbient.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnModeAmbient.Font = new System.Drawing.Font("微软雅黑", 10F, System.Drawing.FontStyle.Bold);
+            this.btnModeAmbient.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(140)))), ((int)(((byte)(140)))), ((int)(((byte)(145)))));
+            this.btnModeAmbient.Name = "btnModeAmbient";
+            this.btnModeAmbient.TabIndex = 17;
+            this.btnModeAmbient.Text = "屏幕氛围";
+            this.btnModeAmbient.UseVisualStyleBackColor = true;
+            this.btnModeAmbient.Click += new System.EventHandler(this.btnMode_Click);
             // 
             // btnModeBreath
             // 
@@ -149,7 +218,7 @@ namespace ColorfulLedKeyboardSet
             this.chkSafeMode.BackColor = System.Drawing.Color.Transparent;
             this.chkSafeMode.Font = new System.Drawing.Font("微软雅黑", 9.5F, System.Drawing.FontStyle.Bold);
             this.chkSafeMode.ForeColor = System.Drawing.Color.Tomato;
-            this.chkSafeMode.Location = new System.Drawing.Point(716, 425);
+            this.chkSafeMode.Location = new System.Drawing.Point(716, 475);
             this.chkSafeMode.Name = "chkSafeMode";
             this.chkSafeMode.Size = new System.Drawing.Size(114, 23);
             this.chkSafeMode.TabIndex = 1;
@@ -167,7 +236,7 @@ namespace ColorfulLedKeyboardSet
             this.btnAbout.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnAbout.Font = new System.Drawing.Font("微软雅黑", 9F);
             this.btnAbout.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(100)))), ((int)(((byte)(105)))));
-            this.btnAbout.Location = new System.Drawing.Point(14, 474);
+            this.btnAbout.Location = new System.Drawing.Point(14, 524);
             this.btnAbout.Name = "btnAbout";
             this.btnAbout.Size = new System.Drawing.Size(100, 32);
             this.btnAbout.TabIndex = 0;
@@ -196,7 +265,7 @@ namespace ColorfulLedKeyboardSet
             this.pnlKeyboardColor.Cursor = System.Windows.Forms.Cursors.Hand;
             this.pnlKeyboardColor.Location = new System.Drawing.Point(20, 48);
             this.pnlKeyboardColor.Name = "pnlKeyboardColor";
-            this.pnlKeyboardColor.Size = new System.Drawing.Size(810, 30);
+            this.pnlKeyboardColor.Size = new System.Drawing.Size(810, 32);
             this.pnlKeyboardColor.TabIndex = 1;
             this.pnlKeyboardColor.Click += new System.EventHandler(this.pnlKeyboardColor_Click);
             this.pnlKeyboardColor.Paint += new System.Windows.Forms.PaintEventHandler(this.pnlKeyboardColor_Paint);
@@ -208,7 +277,7 @@ namespace ColorfulLedKeyboardSet
             this.chkStartMinimized.BackColor = System.Drawing.Color.Transparent;
             this.chkStartMinimized.Font = new System.Drawing.Font("微软雅黑", 9.5F);
             this.chkStartMinimized.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(140)))), ((int)(((byte)(140)))), ((int)(((byte)(145)))));
-            this.chkStartMinimized.Location = new System.Drawing.Point(210, 425);
+            this.chkStartMinimized.Location = new System.Drawing.Point(210, 475);
             this.chkStartMinimized.Name = "chkStartMinimized";
             this.chkStartMinimized.Size = new System.Drawing.Size(145, 23);
             this.chkStartMinimized.TabIndex = 9;
@@ -223,7 +292,7 @@ namespace ColorfulLedKeyboardSet
             this.chkAutoStart.BackColor = System.Drawing.Color.Transparent;
             this.chkAutoStart.Font = new System.Drawing.Font("微软雅黑", 9.5F);
             this.chkAutoStart.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(140)))), ((int)(((byte)(140)))), ((int)(((byte)(145)))));
-            this.chkAutoStart.Location = new System.Drawing.Point(20, 425);
+            this.chkAutoStart.Location = new System.Drawing.Point(20, 475);
             this.chkAutoStart.Name = "chkAutoStart";
             this.chkAutoStart.Size = new System.Drawing.Size(130, 23);
             this.chkAutoStart.TabIndex = 8;
@@ -326,7 +395,7 @@ namespace ColorfulLedKeyboardSet
             this.lblFooterLine.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lblFooterLine.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(28)))), ((int)(((byte)(28)))), ((int)(((byte)(32)))));
-            this.lblFooterLine.Location = new System.Drawing.Point(20, 465);
+            this.lblFooterLine.Location = new System.Drawing.Point(20, 515);
             this.lblFooterLine.Name = "lblFooterLine";
             this.lblFooterLine.Size = new System.Drawing.Size(810, 1);
             this.lblFooterLine.TabIndex = 10;
@@ -338,7 +407,7 @@ namespace ColorfulLedKeyboardSet
             this.lblStatus.BackColor = System.Drawing.Color.Transparent;
             this.lblStatus.Font = new System.Drawing.Font("微软雅黑", 9F);
             this.lblStatus.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(80)))), ((int)(((byte)(80)))), ((int)(((byte)(85)))));
-            this.lblStatus.Location = new System.Drawing.Point(180, 480);
+            this.lblStatus.Location = new System.Drawing.Point(180, 530);
             this.lblStatus.Name = "lblStatus";
             this.lblStatus.Size = new System.Drawing.Size(650, 25);
             this.lblStatus.TabIndex = 11;
@@ -354,7 +423,7 @@ namespace ColorfulLedKeyboardSet
             this.grpSliders.Controls.Add(this.pnlSpeedSlider);
             this.grpSliders.Controls.Add(this.lblBrightness);
             this.grpSliders.Controls.Add(this.pnlBrightnessSlider);
-            this.grpSliders.Location = new System.Drawing.Point(20, 155);
+            this.grpSliders.Location = new System.Drawing.Point(20, 205);
             this.grpSliders.Name = "grpSliders";
             this.grpSliders.Size = new System.Drawing.Size(390, 250);
             this.grpSliders.TabIndex = 12;
@@ -369,7 +438,7 @@ namespace ColorfulLedKeyboardSet
             this.grpPresets.Controls.Add(this.lblPresetTitle);
             this.grpPresets.Controls.Add(this.flowPresets);
             this.grpPresets.Controls.Add(this.btnCustomColor);
-            this.grpPresets.Location = new System.Drawing.Point(440, 155);
+            this.grpPresets.Location = new System.Drawing.Point(440, 205);
             this.grpPresets.Name = "grpPresets";
             this.grpPresets.Size = new System.Drawing.Size(390, 250);
             this.grpPresets.TabIndex = 13;
@@ -410,7 +479,7 @@ namespace ColorfulLedKeyboardSet
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(12)))), ((int)(((byte)(12)))), ((int)(((byte)(14)))));
-            this.ClientSize = new System.Drawing.Size(850, 520);
+            this.ClientSize = new System.Drawing.Size(850, 570);
             this.Controls.Add(this.grpPresets);
             this.Controls.Add(this.grpSliders);
             this.Controls.Add(this.lblStatus);
@@ -423,7 +492,7 @@ namespace ColorfulLedKeyboardSet
             this.Controls.Add(this.chkSafeMode);
             this.Controls.Add(this.btnAbout);
             this.Icon = System.Drawing.SystemIcons.Application;
-            this.MinimumSize = new System.Drawing.Size(600, 450);
+            this.MinimumSize = new System.Drawing.Size(600, 500);
             this.Name = "Form1";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "七彩虹键盘灯光控制中心";
@@ -470,5 +539,9 @@ namespace ColorfulLedKeyboardSet
         private System.Windows.Forms.ContextMenuStrip trayMenu;
         private System.Windows.Forms.ToolStripMenuItem menuShow;
         private System.Windows.Forms.ToolStripMenuItem menuExit;
+        private System.Windows.Forms.Button btnModeMusic;
+        private System.Windows.Forms.Button btnToggleRainbow;
+        private System.Windows.Forms.Button btnModeTemp;
+        private System.Windows.Forms.Button btnModeAmbient;
     }
 }

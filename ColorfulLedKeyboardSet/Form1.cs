@@ -31,6 +31,10 @@ namespace ColorfulLedKeyboardSet
         private bool isBrightnessDragging = false;
         private Color currentKeyboardColor = Color.Green;
 
+        // 新增模式的资源实例
+        private AudioMeter audioMeter;
+        private TemperatureMonitor tempMonitor;
+
         // Preset Colors
         private readonly Color[] PresetColors = new Color[]
         {
@@ -120,6 +124,9 @@ namespace ColorfulLedKeyboardSet
 
             // Set active mode button style
             UpdateModeButtonStyles(currentConfig.Mode);
+
+            // Set active state of rainbow toggle button
+            UpdateRainbowButton();
 
             // Populate preset colors
             SetupPresetButtons();
@@ -238,7 +245,10 @@ namespace ColorfulLedKeyboardSet
 
         private void UpdateModeButtonStyles(int activeMode)
         {
-            Button[] modeButtons = new Button[] { btnModeStatic, btnModeLoop, btnModeBreath, btnModeStrobe };
+            Button[] modeButtons = new Button[] {
+                btnModeStatic, btnModeLoop, btnModeBreath, btnModeStrobe,
+                btnModeMusic, btnModeTemp, btnModeAmbient
+            };
 
             for (int i = 0; i < modeButtons.Length; i++)
             {
@@ -255,6 +265,38 @@ namespace ColorfulLedKeyboardSet
             }
         }
 
+        private void UpdateRainbowButton()
+        {
+            int mode = currentConfig.Mode;
+            // 只有 呼吸灯效 (2), 闪烁警示 (3), 音乐律动 (4) 支持彩虹变色开关
+            bool isRainbowSupported = (mode == 2 || mode == 3 || mode == 4);
+
+            btnToggleRainbow.Enabled = isRainbowSupported;
+
+            if (!isRainbowSupported)
+            {
+                btnToggleRainbow.BackColor = Color.FromArgb(15, 15, 18);
+                btnToggleRainbow.ForeColor = Color.FromArgb(60, 60, 65);
+                btnToggleRainbow.Text = "🌈 七彩变色: 禁用";
+            }
+            else
+            {
+                if (currentConfig.Rainbow)
+                {
+                    btnToggleRainbow.BackColor = Color.FromArgb(35, 20, 50); // 霓虹紫色背景
+                    // 初始颜色：使用当前键盘仿真色，后面会在动画循环里动态同步
+                    btnToggleRainbow.ForeColor = currentKeyboardColor;
+                    btnToggleRainbow.Text = "🌈 七彩变色: 开";
+                }
+                else
+                {
+                    btnToggleRainbow.BackColor = Color.FromArgb(20, 20, 24);
+                    btnToggleRainbow.ForeColor = Color.FromArgb(140, 140, 145);
+                    btnToggleRainbow.Text = "🌈 七彩变色: 关";
+                }
+            }
+        }
+
         private void btnMode_Click(object sender, EventArgs e)
         {
             Button clicked = (Button)sender;
@@ -264,9 +306,21 @@ namespace ColorfulLedKeyboardSet
             else if (clicked == btnModeLoop) mode = 1;
             else if (clicked == btnModeBreath) mode = 2;
             else if (clicked == btnModeStrobe) mode = 3;
+            else if (clicked == btnModeMusic) mode = 4;
+            else if (clicked == btnModeTemp) mode = 5;
+            else if (clicked == btnModeAmbient) mode = 6;
 
             currentConfig.Mode = mode;
             UpdateModeButtonStyles(mode);
+            UpdateRainbowButton();
+            StartAnimation();
+            SaveConfig();
+        }
+
+        private void btnToggleRainbow_Click(object sender, EventArgs e)
+        {
+            currentConfig.Rainbow = !currentConfig.Rainbow;
+            UpdateRainbowButton();
             StartAnimation();
             SaveConfig();
         }
@@ -324,12 +378,36 @@ namespace ColorfulLedKeyboardSet
                 return;
             }
 
+            // 初始化新模式所需的资源
+            if (mode == 4) // 音乐律动模式需要音频电平计
+            {
+                audioMeter = AudioMeter.TryCreate();
+            }
+            else if (mode == 5) // 温度映射模式需要温度监控器
+            {
+                try { tempMonitor = new TemperatureMonitor(); }
+                catch { tempMonitor = null; }
+            }
+
             animationTask = Task.Run(async () =>
             {
                 double hue = 0;
                 bool breathIn = true;
                 double breathVal = 1.0;
                 bool strobeState = true;
+
+                // 音乐律动模式的峰值历史（用于节拍检测）
+                float prevPeak = 0f;
+
+                // 温度模式的平滑过渡
+                Color tempCurrentColor = Color.FromArgb(0, 150, 255);
+                Color tempTargetColor = Color.FromArgb(0, 150, 255);
+                int tempPollCounter = 0;
+
+                // 屏幕氛围模式的平滑过渡
+                Color ambientCurrentColor = Color.FromArgb(0, 100, 200);
+                Color ambientTargetColor = Color.FromArgb(0, 100, 200);
+                int ambientPollCounter = 0;
 
                 while (!token.IsCancellationRequested)
                 {
@@ -360,22 +438,140 @@ namespace ColorfulLedKeyboardSet
                             if (breathVal <= 0.05) { breathVal = 0.05; breathIn = true; }
                         }
 
-                        Color baseColor = ColorFromHex(currentConfig.Color);
+                        Color baseColor;
+                        if (currentConfig.Rainbow)
+                        {
+                            baseColor = ColorFromHSV(hue, 1.0, 1.0);
+                            hue = (hue + 1) % 360; // 较平缓的变色过渡
+                        }
+                        else
+                        {
+                            baseColor = ColorFromHex(currentConfig.Color);
+                        }
                         midOut = Color.FromArgb((int)(baseColor.R * breathVal), (int)(baseColor.G * breathVal), (int)(baseColor.B * breathVal));
                     }
                     else if (mode == 3) // Strobe mode
                     {
-                        sleepMs = Math.Max(50, 600 - speed * 55);
+                        sleepMs = (int)(Math.Max(30, 400 - speed * 38) * 1.1);
+
+                        Color baseColor;
+                        if (currentConfig.Rainbow)
+                        {
+                            baseColor = ColorFromHSV(hue, 1.0, 1.0);
+                            hue = (hue + 3.6) % 360;
+                        }
+                        else
+                        {
+                            baseColor = ColorFromHex(currentConfig.Color);
+                        }
 
                         if (strobeState)
                         {
-                            midOut = ColorFromHex(currentConfig.Color);
+                            midOut = baseColor;
                         }
                         else
                         {
                             midOut = Color.Black;
                         }
                         strobeState = !strobeState;
+                    }
+                    else if (mode == 4) // 音乐律动模式
+                    {
+                        sleepMs = Math.Max(15, 60 - speed * 5);
+
+                        float peak = 0f;
+                        if (audioMeter != null)
+                        {
+                            peak = audioMeter.GetPeakValue();
+                        }
+
+                        // 节拍检测：峰值跳变时产生爆闪效果
+                        float delta = peak - prevPeak;
+                        bool isBeat = delta > 0.15f;
+                        prevPeak = peak;
+
+                        Color baseColor;
+                        if (currentConfig.Rainbow)
+                        {
+                            // 每次节拍命中时色相前进30°，产生随音乐变色效果
+                            if (isBeat)
+                            {
+                                hue = (hue + 30) % 360;
+                            }
+                            // 色相也随时间缓慢漂移，让安静时也有微妙变化
+                            hue = (hue + 0.3) % 360;
+                            baseColor = ColorFromHSV(hue, 1.0, 1.0);
+                        }
+                        else
+                        {
+                            baseColor = ColorFromHex(currentConfig.Color);
+                        }
+
+                        if (isBeat)
+                        {
+                            midOut = baseColor;
+                        }
+                        else
+                        {
+                            // 常规：亮度随音量缩放，最低保持5%微光
+                            double brightness = Math.Max(0.05, peak);
+                            midOut = Color.FromArgb(
+                                (int)(baseColor.R * brightness),
+                                (int)(baseColor.G * brightness),
+                                (int)(baseColor.B * brightness));
+                        }
+                    }
+                    else if (mode == 5) // 温度映射模式
+                    {
+                        sleepMs = 50; // 50ms 刷新用于平滑过渡动画
+
+                        // 每 60 帧（约3秒）轮询一次温度
+                        tempPollCounter++;
+                        if (tempPollCounter >= 60)
+                        {
+                            tempPollCounter = 0;
+                            if (tempMonitor != null)
+                            {
+                                double val = tempMonitor.GetNormalizedValue();
+                                tempTargetColor = TemperatureMonitor.MapToColor(val);
+
+                                // 更新状态栏文本
+                                if (this.IsHandleCreated && !this.IsDisposed)
+                                {
+                                    string statusText = tempMonitor.StatusText;
+                                    this.BeginInvoke((MethodInvoker)delegate
+                                    {
+                                        lblStatus.Text = statusText;
+                                        lblStatus.ForeColor = Color.FromArgb(0, 173, 181);
+                                    });
+                                }
+                            }
+                        }
+
+                        // 平滑过渡：当前颜色向目标颜色渐变
+                        tempCurrentColor = SmoothLerp(tempCurrentColor, tempTargetColor, 0.08);
+                        midOut = tempCurrentColor;
+                    }
+                    else if (mode == 6) // 屏幕氛围灯模式
+                    {
+                        sleepMs = 50; // 50ms 刷新用于平滑过渡动画
+
+                        // 根据速度滑块调整采样频率（每 N 帧采样一次）
+                        int sampleInterval = Math.Max(3, 15 - speed);
+                        ambientPollCounter++;
+                        if (ambientPollCounter >= sampleInterval)
+                        {
+                            ambientPollCounter = 0;
+                            try
+                            {
+                                ambientTargetColor = ScreenColorSampler.GetDominantColor();
+                            }
+                            catch { }
+                        }
+
+                        // 平滑过渡：避免灯光频闪
+                        ambientCurrentColor = SmoothLerp(ambientCurrentColor, ambientTargetColor, 0.1);
+                        midOut = ambientCurrentColor;
                     }
 
                     // Apply global brightness scaling
@@ -393,6 +589,12 @@ namespace ColorfulLedKeyboardSet
                         {
                             currentKeyboardColor = midOut;
                             pnlKeyboardColor.Refresh();
+
+                            // 让“七彩变色”按钮文字颜色跟着键盘一起同步变色
+                            if (currentConfig.Rainbow && btnToggleRainbow.Enabled)
+                            {
+                                btnToggleRainbow.ForeColor = midOut;
+                            }
                         });
                     }
 
@@ -424,6 +626,10 @@ namespace ColorfulLedKeyboardSet
                 cts.Dispose();
                 cts = null;
             }
+
+            // 释放新模式资源
+            if (audioMeter != null) { audioMeter.Dispose(); audioMeter = null; }
+            if (tempMonitor != null) { tempMonitor.Dispose(); tempMonitor = null; }
         }
 
         private void SaveConfig()
@@ -443,6 +649,18 @@ namespace ColorfulLedKeyboardSet
                 (int)(color.G * factor),
                 (int)(color.B * factor)
             );
+        }
+
+        // Helper: 颜色平滑插值（用于温度/氛围灯模式的渐变过渡）
+        private Color SmoothLerp(Color current, Color target, double speed)
+        {
+            int r = current.R + (int)((target.R - current.R) * speed);
+            int g = current.G + (int)((target.G - current.G) * speed);
+            int b = current.B + (int)((target.B - current.B) * speed);
+            return Color.FromArgb(
+                Math.Max(0, Math.Min(255, r)),
+                Math.Max(0, Math.Min(255, g)),
+                Math.Max(0, Math.Min(255, b)));
         }
 
         // Helper: Convert HSV to RGB Color
@@ -733,13 +951,13 @@ namespace ColorfulLedKeyboardSet
         private void btnAbout_Click(object sender, EventArgs e)
         {
             MessageBox.Show("七彩虹笔记本键盘灯光控制中心\n" +
-                            "版本：v2.5 Acrylic HUD Edition\n\n" +
+                            "版本：v3.0 Acrylic HUD Edition\n\n" +
                             "改进说明：\n" +
                             "1. 优化后台渲染线程，采用微秒/毫秒级 Task 调度，CPU 占用率降至近 0%。\n" +
                             "2. 增加【安全测试模式】，可在非兼容设备上无害化测试 UI 和效果。\n" +
                             "3. 引入极简科技感【亚克力 HUD 镜面背景】和 3D LED 圆球发光预设。\n" +
                             "4. 重构了传统的 TrackBar，替换为发光【数字能量条】滑块，支持平滑鼠标拖拽调整。\n" +
-                            "5. 对中央模拟光效条采用了【双层霓虹激光核心算法】绘制，动态渐变效果拉满。\n" +
+                            "5. 新增【音乐律动】【闪烁变色】【温度映射】【屏幕氛围灯】四大高级灯效模式。\n" +
                             "6. 引入亮度平滑模拟、系统托盘常驻和 Windows 开机自启支持，支持大屏拉伸自适应布局。\n\n" +
                             "声明：本程序利用逆向硬件接口开发，开发者不对任何可能引起的硬件或驱动异常承担责任。",
                             "关于软件", MessageBoxButtons.OK, MessageBoxIcon.Information);

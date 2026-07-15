@@ -951,13 +951,13 @@ namespace ColorfulLedKeyboardSet
         private void btnAbout_Click(object sender, EventArgs e)
         {
             MessageBox.Show("七彩虹笔记本键盘灯光控制中心\n" +
-                            "版本：v3.0 Acrylic HUD Edition\n\n" +
+                            "版本：v2.0 Acrylic HUD Edition\n\n" +
                             "改进说明：\n" +
                             "1. 优化后台渲染线程，采用微秒/毫秒级 Task 调度，CPU 占用率降至近 0%。\n" +
                             "2. 增加【安全测试模式】，可在非兼容设备上无害化测试 UI 和效果。\n" +
                             "3. 引入极简科技感【亚克力 HUD 镜面背景】和 3D LED 圆球发光预设。\n" +
                             "4. 重构了传统的 TrackBar，替换为发光【数字能量条】滑块，支持平滑鼠标拖拽调整。\n" +
-                            "5. 新增【音乐律动】【闪烁变色】【温度映射】【屏幕氛围灯】四大高级灯效模式。\n" +
+                            "5. 新增【音乐律动】【温度映射】【屏幕氛围灯】三大高级灯效模式以及【七彩变色】修饰开关。\n" +
                             "6. 引入亮度平滑模拟、系统托盘常驻和 Windows 开机自启支持，支持大屏拉伸自适应布局。\n\n" +
                             "声明：本程序利用逆向硬件接口开发，开发者不对任何可能引起的硬件或驱动异常承担责任。",
                             "关于软件", MessageBoxButtons.OK, MessageBoxIcon.Information);

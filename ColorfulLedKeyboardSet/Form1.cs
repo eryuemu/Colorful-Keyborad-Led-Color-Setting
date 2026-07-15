@@ -493,13 +493,13 @@ namespace ColorfulLedKeyboardSet
                         Color baseColor;
                         if (currentConfig.Rainbow)
                         {
-                            // 每次节拍命中时色相前进30°，产生随音乐变色效果
+                            // 每次节拍命中时色相前进21°（下调30%），产生随音乐变色效果
                             if (isBeat)
                             {
-                                hue = (hue + 30) % 360;
+                                hue = (hue + 21) % 360;
                             }
-                            // 色相也随时间缓慢漂移，让安静时也有微妙变化
-                            hue = (hue + 0.3) % 360;
+                            // 色相也随时间缓慢漂移（下调30%），让安静时也有微妙变化
+                            hue = (hue + 0.21) % 360;
                             baseColor = ColorFromHSV(hue, 1.0, 1.0);
                         }
                         else

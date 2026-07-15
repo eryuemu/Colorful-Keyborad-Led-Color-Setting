@@ -495,7 +495,7 @@ namespace ColorfulLedKeyboardSet
             this.MinimumSize = new System.Drawing.Size(600, 500);
             this.Name = "Form1";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "七彩虹键盘灯光控制中心";
+            this.Text = "七彩虹键盘灯光控制中心 - 原作者: 墨水";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
             this.Load += new System.EventHandler(this.Form1_Load);
             this.SizeChanged += new System.EventHandler(this.Form1_SizeChanged);
